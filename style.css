@@ -1,0 +1,13 @@
+.container img {
+    height: 15rem;
+    width: 13rem;
+    border-radius: 10px;
+}
+
+.container {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: auto auto auto auto;
+    padding: 3rem;
+    gap: 8rem;
+}
