@@ -10,7 +10,7 @@ git clone https://github.com/BugReportOnWeb/unistud-image-db.git
 cd unistud-image-db
 ```
 
-2. Change the `START` and 'END' values as per your range.
+2. Change the `START` and `END` values in `main.py`.
 ```python
 START = 53675  # Replace with your starting range value
 END = 53725    # Replace with your ending range value
@@ -20,9 +20,9 @@ END = 53725    # Replace with your ending range value
 ```bash
 python3 main.py
 ```
-The script will start scaraping the data if found between the specified range.
+The script will start scraping the data (if found) between the specified range.
 
-4. Open he `index.html` file to see the result
+4. Open the `index.html` file to see the result.
 ```bash
 open index.html
 ```
