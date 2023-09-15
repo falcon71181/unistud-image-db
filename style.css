@@ -1,4 +1,4 @@
-.container img {
+img {
     height: 15rem;
     width: 13rem;
     border-radius: 10px;
@@ -10,4 +10,15 @@
     grid-template-columns: auto auto auto auto;
     padding: 3rem;
     gap: 8rem;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justiy-content: center;
+    align-items: center;
+}
+
+.image-container p {
+    font-size: 1.4rem;
 }
