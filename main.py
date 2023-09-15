@@ -18,7 +18,7 @@ def scrap(num):
 
     print(f"Status: {round(percentage, 2)}%");
 
-    main_url = URL + f"{num}.jpg"
+    main_url = f"{URL}{num}.jpg"
 
     try:
         page = urlopen(main_url) 
@@ -38,7 +38,7 @@ def main():
         image_value = scrap(num)
 
         if (image_value != -1):
-            images_section += f"<img src='{URL}/{image_value}.jpg' />"
+            images_section += f"<div class='image-container'><img src='{URL}{image_value}.jpg' /><p>{image_value}</p></div>"
 
     with open("./index.html", "w") as image_file:
         image_file.write(BOILERPLATE_START + images_section + BOILERPLATE_END)
