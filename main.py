@@ -1,51 +1,52 @@
-from urllib.request import urlopen
 import os
+import requests
+from jinja2 import Environment, FileSystemLoader
+from concurrent.futures import ThreadPoolExecutor
 
-URL = "https://punjab.chitkara.edu.in/Storage/Images/Student/";
+URL = "https://punjab.chitkara.edu.in/Storage/Images/Student/"
 INDEX_URL = f"file://{os.getcwd()}/index.html"
 
 START = 53675
 END = 53725
-SIZE = (END - START) + 1
 
-BOILERPLATE_START = '''<DOCKTYPE html><html><head><title>Images</title>
-<link href='./style.css' rel='stylesheet' /></head><body><div class='container'>'''
-BOILERPLATE_END = "<div></body></html>"
-
-def scrap(num):
-    relative_value = (num - START) + 1
-    percentage = (relative_value / SIZE) * 100
-
-    print(f"Status: {round(percentage, 2)}%");
-
+MAX_THREADS = 300
+def scrap_image(num):
     main_url = f"{URL}{num}.jpg"
-
     try:
-        page = urlopen(main_url) 
-        image = num
-    except Exception:
-        image = -1;
+        response = requests.get(main_url)
+        if response.status_code == 200:
+            return num
+    except requests.exceptions.RequestException:
+        pass
+    return -1
 
-    return image
+def create_html_page(images):
+    env = Environment(loader=FileSystemLoader('.'))
+    template = env.get_template('template.html')
+    html_content = template.render(images=images)
+    with open('index.html', 'w') as html_file:
+        html_file.write(html_content)
+
+def clear_screen():
+    os.system('clear' if os.name == 'posix' else 'cls')
 
 def main():
-    images_section = ""
+    images = []
 
-    for num in range(START, END + 1):
-        os.system('clear')
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        futures = [executor.submit(scrap_image, num) for num in range(START, END + 1)]
+        
+        clear_screen()
         print(f"Extracting images from {START} - {END}")
+        
+        for future in futures:
+            image_value = future.result()
+            if image_value != -1:
+                images.append({"src": f"{URL}{image_value}.jpg", "value": image_value})
 
-        image_value = scrap(num)
+    create_html_page(images)
 
-        if (image_value != -1):
-            images_section += f"<div class='image-container'><img src='{URL}{image_value}.jpg' /><p>{image_value}</p></div>"
-
-    with open("./index.html", "w") as image_file:
-        image_file.write(BOILERPLATE_START + images_section + BOILERPLATE_END)
-
-    print(f"Extration completed. Open: {INDEX_URL}")
-
+    print(f"Extraction completed. Open: {INDEX_URL}")
 
 if __name__ == "__main__":
     main()
-
