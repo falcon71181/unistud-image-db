@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Images</title>
+    <link href="./style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        {% for image in images %}
+        <div class="image-container">
+            <img src="{{ image.src }}" />
+            <p>{{ image.value }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
